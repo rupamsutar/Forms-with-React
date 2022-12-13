@@ -1,21 +1,48 @@
-import { useState } from "react";
+import { useReducer } from "react";
+
+const initialState = {
+    value: "",
+    isTouched: false
+}
+
+const inputReducer = (state, action) => {
+    if (action.type === "INPUT") {
+        return {
+            value: action.value,
+            isTouched: state.isTouched
+        }
+    }
+    if (action.type === "BLUR") {
+        return {
+            value: state.value,
+            isTouched: true,
+        }
+    }
+    if (action.type === "RESET") {
+        return initialState;
+    }
+}
 
 const useInput = (validateInput) => {
-    const [enteredInput, setEnteredInput] = useState("");
-    const [isTouched, setIsTouched] = useState(false);
 
-    const inputIsValid = validateInput(enteredInput);
-    const hasError = !inputIsValid && isTouched;
+    const [inputState, dispatchInput] = useReducer(inputReducer, initialState)
 
-    const inputChangeHandler = (event) => {setEnteredInput(event.target.value)};
-    const inputBlurhandler = (event) => {setIsTouched(true)};
+    const inputIsValid = validateInput(inputState.value);
+    const hasError = !inputIsValid && inputState.isTouched;
+
+    const inputChangeHandler = (event) => {
+        dispatchInput({type: "INPUT", value: event.target.value});
+    };
+    const inputBlurhandler = (event) => {
+        dispatchInput({type: "BLUR"})
+    };
+
     const reset = () => {
-        setEnteredInput("");
-        setIsTouched(false);
+        dispatchInput({type: "RESET"})
     }
 
     return {
-        enteredInput,
+        enteredInput: inputState.value,
         inputIsValid,
         hasError,
         inputChangeHandler,
