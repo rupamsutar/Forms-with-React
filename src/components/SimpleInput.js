@@ -1,15 +1,27 @@
 import {useState} from "react";
+import useInput from "../hooks/use-input";
 
 const SimpleInput = (props) => {
 
-  const [enteredName, setEnteredName] = useState("");
+  const {
+    enteredInput : enteredName,
+    inputIsValid: enteredNameIsValid,
+    hasError: nameInputIsInvalid,
+    inputChangeHandler: nameChangeHandler,
+    inputBlurhandler: nameInputBlurHandler,
+    reset: nameReset
+
+  } = useInput((event) => event.trim() !== "")
+
+
+  // const [enteredName, setEnteredName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
-  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+  // const [enteredNameTouched, setEnteredNameTouched] = useState(false);
   const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
   
-  const enteredNameIsValid = enteredName.trim() !== "";
+  // const enteredNameIsValid = enteredName.trim() !== "";
   const enteredEmailIsValid = enteredEmail.includes("@");
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
+  // const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
   const emailInputIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
   let formIsValid = false;
 
@@ -17,18 +29,18 @@ const SimpleInput = (props) => {
     formIsValid = true;
   }
 
-  const nameChangeHandler = (event) => {setEnteredName(event.target.value)};
+  // const nameChangeHandler = (event) => {setEnteredName(event.target.value)};
   const emailChangeHandler = (event) => {setEnteredEmail(event.target.value)};
-  const nameInputBlurHandler = () => {setEnteredNameTouched(true)};
+  // const nameInputBlurHandler = () => {setEnteredNameTouched(true)};
   const emailInputBlurHandler = () => {setEnteredEmailTouched(true)};
 
   const fromSubmitHandler = (event) => {
     event.preventDefault();
     console.log(enteredEmail);
     console.log(enteredName);
-    setEnteredName("");
+
+    nameReset();
     setEnteredEmail("");
-    setEnteredNameTouched(false);
     setEnteredEmailTouched(false);
   }
 
