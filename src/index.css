@@ -31,6 +31,15 @@ body {
   display: block;
 }
 
+button:disabled,
+button:disabled:hover,
+button:disabled:active {
+  background-color: #ccc;
+  color: rgb(95, 95, 95);
+  border-color:#ccc;
+  cursor: not-allowed;
+}
+
 .form-control label {
   font-weight: bold;
   margin-bottom: 0.5rem;
